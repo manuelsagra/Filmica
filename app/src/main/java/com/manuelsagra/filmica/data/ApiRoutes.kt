@@ -21,6 +21,19 @@ object ApiRoutes {
                 .toString()
     }
 
+    fun trendingUrl(
+            timeWindow: String = "day",
+            page: Int = 1
+    ): String {
+        return getUriBuilder()
+                .appendPath("trending")
+                .appendPath("movie")
+                .appendPath(timeWindow)
+                .appendQueryParameter("page", page.toString())
+                .build()
+                .toString()
+    }
+
     private fun getUriBuilder() =
             Uri.Builder()
                 .scheme("https")

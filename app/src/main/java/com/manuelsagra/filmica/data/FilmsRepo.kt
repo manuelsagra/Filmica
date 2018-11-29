@@ -7,6 +7,7 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.manuelsagra.filmica.data.ApiRoutes.discoverUrl
+import com.manuelsagra.filmica.data.ApiRoutes.trendingUrl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -31,15 +32,11 @@ object FilmsRepo {
          }
     }
 
-    fun discoverFilms(
-            context: Context,
-            callbackSuccess: ((MutableList<Film>) -> Unit),
-            callbackError: ((VolleyError) -> Unit)
-    ) {
-        if (films.isEmpty()) {
-            requestDiscoverFilms(callbackSuccess, callbackError, context)
-        } else {
-            callbackSuccess(films)
+    fun insertNew(newFilms: List<Film>) {
+        newFilms.map {film ->
+            if (!films.contains(film)) {
+                films.add(film)
+            }
         }
     }
 
@@ -47,6 +44,16 @@ object FilmsRepo {
         GlobalScope.launch(Dispatchers.Main) {
             var async = async(Dispatchers.IO) {
                 getDBInstance(context).filmDao().insertFilm(film)
+            }
+            async.await()
+            callbackSuccess.invoke(film)
+        }
+    }
+
+    fun deleteFilm(context: Context, film: Film, callbackSuccess: (Film) -> Unit) {
+        GlobalScope.launch(Dispatchers.Main) {
+            var async = async(Dispatchers.IO) {
+                getDBInstance(context).filmDao().deleteFilm(film)
             }
             async.await()
             callbackSuccess.invoke(film)
@@ -61,28 +68,5 @@ object FilmsRepo {
             var films: List<Film> = async.await()
             callbackSuccess.invoke(films)
         }
-    }
-
-    fun deleteFilm(context: Context, film: Film, callbackSuccess: (Film) -> Unit) {
-        GlobalScope.launch(Dispatchers.Main) {
-            var async = async(Dispatchers.IO) {
-                getDBInstance(context).filmDao().deleteFilm(film)
-            }
-            async.await()
-            callbackSuccess.invoke(film)
-        }
-    }
-
-    private fun requestDiscoverFilms(callbackSuccess: (MutableList<Film>) -> Unit, callbackError: (VolleyError) -> Unit, context: Context) {
-        val url = discoverUrl()
-        val request = JsonObjectRequest(Request.Method.GET, url, null, { response ->
-            films.addAll(Film.parseFilms(response))
-            callbackSuccess(films)
-        }, { error ->
-            callbackError(error)
-        })
-
-        Volley.newRequestQueue(context)
-                .add(request)
     }
 }

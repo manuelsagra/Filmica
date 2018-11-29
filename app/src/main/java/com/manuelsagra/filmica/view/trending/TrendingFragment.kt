@@ -1,4 +1,4 @@
-package com.manuelsagra.filmica.view.films
+package com.manuelsagra.filmica.view.trending
 
 import android.content.Context
 import android.os.Bundle
@@ -11,15 +11,17 @@ import android.view.ViewGroup
 import com.manuelsagra.filmica.R
 import com.manuelsagra.filmica.data.DiscoverRepo
 import com.manuelsagra.filmica.data.Film
+import com.manuelsagra.filmica.data.TrendingRepo
+import com.manuelsagra.filmica.view.films.FilmsAdapter
 import com.manuelsagra.filmica.view.utils.ItemOffsetDecoration
-import kotlinx.android.synthetic.main.fragment_films.*
+import kotlinx.android.synthetic.main.fragment_trending.*
 import kotlinx.android.synthetic.main.layout_error.*
 
-open class FilmsFragment: Fragment() {
+class TrendingFragment: Fragment() {
     lateinit var listener: OnItemClickListener
 
-    open val list: RecyclerView by lazy {
-        val instance = view!!.findViewById<RecyclerView>(R.id.list_films_discover)
+    val list: RecyclerView by lazy {
+        val instance = view!!.findViewById<RecyclerView>(R.id.list_films_trending)
         instance.addItemDecoration(ItemOffsetDecoration(R.dimen.grid_offset))
         instance.setHasFixedSize(true)
 
@@ -35,7 +37,7 @@ open class FilmsFragment: Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_films, container, false)
+        return inflater.inflate(R.layout.fragment_trending, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,10 +63,10 @@ open class FilmsFragment: Fragment() {
     }
 
     fun reload() {
-        Log.i("RELOAD DISCOVER", "Called")
+        Log.i("RELOAD TRENDING", "Called")
 
-        DiscoverRepo.discoverFilms(context!!, { films ->
-            Log.i("RELOAD DISCOVER", "Finished")
+        TrendingRepo.trendingFilms(context!!, { films ->
+            Log.i("RELOAD TRENDING", "Finished")
             progressBar.visibility = View.INVISIBLE
             layoutError.visibility = View.INVISIBLE
             list.visibility = View.VISIBLE

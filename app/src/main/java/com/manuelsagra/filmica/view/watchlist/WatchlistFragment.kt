@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.fragment_watchlist.*
 import com.manuelsagra.filmica.R
 import com.manuelsagra.filmica.data.FilmsRepo
 import com.manuelsagra.filmica.view.utils.SwipeToDeleteCallback
-import java.text.FieldPosition
 
 class WatchlistFragment : Fragment() {
     val adapter: WatchlistAdapter by lazy {

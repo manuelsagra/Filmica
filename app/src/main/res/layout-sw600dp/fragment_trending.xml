@@ -16,9 +16,9 @@
     <include layout="@layout/layout_error"></include>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_films_discover"
+        android:id="@+id/list_films_trending"
         app:layoutManager="android.support.v7.widget.GridLayoutManager"
-        app:spanCount="2"
+        app:spanCount="3"
         tools:listitem="@layout/item_film"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
