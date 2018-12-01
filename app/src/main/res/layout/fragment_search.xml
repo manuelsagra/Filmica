@@ -23,7 +23,8 @@
     <include layout="@layout/layout_noresults"></include>
     <include layout="@layout/layout_error"></include>
 
-    <android.support.v7.widget.RecyclerView android:id="@+id/listResults"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/listResults"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"

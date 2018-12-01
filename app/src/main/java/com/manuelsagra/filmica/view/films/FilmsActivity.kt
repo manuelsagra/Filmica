@@ -8,6 +8,7 @@ import com.manuelsagra.filmica.R
 import com.manuelsagra.filmica.data.Film
 import com.manuelsagra.filmica.view.details.DetailsActivity
 import com.manuelsagra.filmica.view.details.DetailsFragment
+import com.manuelsagra.filmica.view.details.DetailsPlaceholderFragment
 import com.manuelsagra.filmica.view.search.SearchFragment
 import com.manuelsagra.filmica.view.trending.TrendingFragment
 import com.manuelsagra.filmica.view.utils.FilmClickListener
@@ -19,7 +20,7 @@ const val TAG_TRENDING = "trendingTag"
 const val TAG_WATCHLIST = "watchlistTag"
 const val TAG_SEARCH = "searchTag"
 
-class FilmsActivity : AppCompatActivity(), FilmClickListener {
+class FilmsActivity: AppCompatActivity(), FilmClickListener {
     private lateinit var filmsFragment: FilmsFragment
     private lateinit var trendingFragment: TrendingFragment
     private lateinit var watchlistFragment: WatchlistFragment
@@ -71,6 +72,10 @@ class FilmsActivity : AppCompatActivity(), FilmClickListener {
                 .hide(watchlistFragment)
                 .hide(searchFragment)
                 .commit()
+
+        if (isTablet()) {
+            supportFragmentManager.beginTransaction().replace(R.id.fragmentDetails, DetailsPlaceholderFragment()).commit()
+        }
 
         activeFragment = trendingFragment
     }

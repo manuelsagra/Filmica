@@ -58,16 +58,16 @@ class SearchFragment : Fragment() {
                     if (query.length > MIN_SEARCH_QUERY) {
                         stopSearch = false
                         progressBar.visibility = View.VISIBLE
-                        layoutError.visibility = View.INVISIBLE
-                        layoutNoResults.visibility = View.INVISIBLE
-                        listResults.visibility = View.INVISIBLE
+                        layoutError.visibility = View.GONE
+                        layoutNoResults.visibility = View.GONE
+                        listResults.visibility = View.GONE
                         search(query)
                     } else {
                         stopSearch = true
-                        progressBar.visibility = View.INVISIBLE
-                        layoutError.visibility = View.INVISIBLE
-                        layoutNoResults.visibility = View.INVISIBLE
-                        listResults.visibility = View.INVISIBLE
+                        progressBar.visibility = View.GONE
+                        layoutError.visibility = View.GONE
+                        layoutNoResults.visibility = View.GONE
+                        listResults.visibility = View.GONE
                     }
                 }
             }
@@ -84,22 +84,22 @@ class SearchFragment : Fragment() {
     fun search(query: String) {
         SearchRepo.searchFilms(context!!, query, { films ->
             if (!stopSearch && films.size > 0) {
-                progressBar.visibility = View.INVISIBLE
-                layoutError.visibility = View.INVISIBLE
-                layoutNoResults.visibility = View.INVISIBLE
+                progressBar.visibility = View.GONE
+                layoutError.visibility = View.GONE
+                layoutNoResults.visibility = View.GONE
                 listResults.visibility = View.VISIBLE
                 adapter.setFilms(films)
             } else if (films.size == 0) {
-                progressBar.visibility = View.INVISIBLE
-                layoutError.visibility = View.INVISIBLE
+                progressBar.visibility = View.GONE
+                layoutError.visibility = View.GONE
                 layoutNoResults.visibility = View.VISIBLE
-                listResults.visibility = View.INVISIBLE
+                listResults.visibility = View.GONE
             }
         }, { error ->
-            progressBar.visibility = View.INVISIBLE
+            progressBar.visibility = View.GONE
             layoutError.visibility = View.VISIBLE
-            layoutNoResults.visibility = View.INVISIBLE
-            listResults.visibility = View.INVISIBLE
+            layoutNoResults.visibility = View.GONE
+            listResults.visibility = View.GONE
 
             error.printStackTrace()
         })
