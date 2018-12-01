@@ -12,4 +12,6 @@
 
     <string name="template_share">Let\'s watch %s (MovieDB rates it with %.1f/10)</string>
     <string name="title_trending">Trending</string>
+    <string name="title_search">Search</string>
+    <string name="no_results">No results found</string>
 </resources>

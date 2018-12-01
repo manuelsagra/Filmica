@@ -9,16 +9,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.manuelsagra.filmica.R
-import com.manuelsagra.filmica.data.DiscoverRepo
 import com.manuelsagra.filmica.data.Film
 import com.manuelsagra.filmica.data.TrendingRepo
 import com.manuelsagra.filmica.view.films.FilmsAdapter
+import com.manuelsagra.filmica.view.utils.FilmClickListener
 import com.manuelsagra.filmica.view.utils.ItemOffsetDecoration
 import kotlinx.android.synthetic.main.fragment_trending.*
 import kotlinx.android.synthetic.main.layout_error.*
 
 class TrendingFragment: Fragment() {
-    lateinit var listener: OnItemClickListener
+    lateinit var listener: FilmClickListener
 
     val list: RecyclerView by lazy {
         val instance = view!!.findViewById<RecyclerView>(R.id.list_films_trending)
@@ -52,7 +52,7 @@ class TrendingFragment: Fragment() {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
-        if (context is OnItemClickListener) {
+        if (context is FilmClickListener) {
             listener = context
         }
     }
@@ -79,9 +79,5 @@ class TrendingFragment: Fragment() {
 
             error.printStackTrace()
         })
-    }
-
-    interface OnItemClickListener {
-        fun onItemClicked(film: Film)
     }
 }

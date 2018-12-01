@@ -10,13 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.manuelsagra.filmica.R
 import com.manuelsagra.filmica.data.DiscoverRepo
-import com.manuelsagra.filmica.data.Film
+import com.manuelsagra.filmica.view.utils.FilmClickListener
 import com.manuelsagra.filmica.view.utils.ItemOffsetDecoration
 import kotlinx.android.synthetic.main.fragment_films.*
 import kotlinx.android.synthetic.main.layout_error.*
 
 open class FilmsFragment: Fragment() {
-    lateinit var listener: OnItemClickListener
+    lateinit var listener: FilmClickListener
 
     open val list: RecyclerView by lazy {
         val instance = view!!.findViewById<RecyclerView>(R.id.list_films_discover)
@@ -50,7 +50,7 @@ open class FilmsFragment: Fragment() {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
 
-        if (context is OnItemClickListener) {
+        if (context is FilmClickListener) {
             listener = context
         }
     }
@@ -77,9 +77,5 @@ open class FilmsFragment: Fragment() {
 
             error.printStackTrace()
         })
-    }
-
-    interface OnItemClickListener {
-        fun onItemClicked(film: Film)
     }
 }
