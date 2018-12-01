@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.graphics.Palette
@@ -66,10 +67,26 @@ class DetailsFragment: Fragment() {
         }
 
         btnAdd.setOnClickListener {
-            film?.let {
-                FilmsRepo.saveFilm(context!!, it) {
-                    Toast.makeText(context,"Added to watchlist", Toast.LENGTH_LONG).show()
-                }
+            saveFilm()
+        }
+    }
+
+    private fun deleteFilm() {
+        film?.let { film ->
+            FilmsRepo.deleteFilm(context!!, film) {
+                Snackbar.make(view!!, R.string.removed_to_watchlist, Snackbar.LENGTH_LONG).setAction(getString(R.string.undo), {
+                    saveFilm()
+                }).show()
+            }
+        }
+    }
+
+    private fun saveFilm() {
+        film?.let { film ->
+            FilmsRepo.saveFilm(context!!, film) {
+                Snackbar.make(view!!, R.string.added_to_watchlist, Snackbar.LENGTH_LONG).setAction(getString(R.string.undo), {
+                    deleteFilm()
+                }).show()
             }
         }
     }
