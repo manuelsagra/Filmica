@@ -13,11 +13,13 @@ import com.manuelsagra.filmica.view.utils.SimpleTarget
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_watchlist.view.*
 
-class WatchlistAdapter: BaseFilmAdapter<WatchlistAdapter.WatchlistHolder> (
+class WatchlistAdapter(
+        clickListener: ((Film) -> Unit)? = null
+): BaseFilmAdapter<WatchlistAdapter.WatchlistHolder> (
         layoutItem = R.layout.item_watchlist,
-        holderCreator = { view -> WatchlistHolder(view) }
+        holderCreator = { view -> WatchlistHolder(view, clickListener) }
 ) {
-    class WatchlistHolder(itemView: View): BaseFilmHolder(itemView) {
+    class WatchlistHolder(itemView: View, clickListener: ((Film) -> Unit)?): BaseFilmHolder(itemView, clickListener) {
         override fun bindFilm(film: Film) {
             super.bindFilm(film)
 

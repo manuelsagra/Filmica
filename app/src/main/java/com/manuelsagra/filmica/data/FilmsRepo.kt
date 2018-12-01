@@ -66,6 +66,7 @@ object FilmsRepo {
                 getDBInstance(context).filmDao().getFilms()
             }
             var films: List<Film> = async.await()
+            insertNew(films)
             callbackSuccess.invoke(films)
         }
     }

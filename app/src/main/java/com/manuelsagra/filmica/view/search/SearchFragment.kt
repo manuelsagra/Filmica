@@ -58,6 +58,9 @@ class SearchFragment : Fragment() {
                     if (query.length > MIN_SEARCH_QUERY) {
                         stopSearch = false
                         progressBar.visibility = View.VISIBLE
+                        layoutError.visibility = View.INVISIBLE
+                        layoutNoResults.visibility = View.INVISIBLE
+                        listResults.visibility = View.INVISIBLE
                         search(query)
                     } else {
                         stopSearch = true
