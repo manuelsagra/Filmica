@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,26 +71,32 @@ class WatchlistFragment : Fragment() {
 
     private fun deleteFilmAt(position: Int) {
         val film = adapter.getFilm(position)
-        deleteFilm(film, position)
+        deleteFilm(film)
     }
 
-    private fun deleteFilm(film: Film, position: Int) {
+    private fun deleteFilm(film: Film) {
         FilmsRepo.deleteFilm(context!!, film) { film ->
-            adapter.removeItemAt(position)
+            update()
             Snackbar.make(view!!, R.string.removed_to_watchlist, Snackbar.LENGTH_LONG).setAction(getString(R.string.undo), {
-                saveFilm(film, position)
+                saveFilm(film)
             }).show()
         }
     }
 
-    private fun saveFilm(film: Film, position: Int) {
+    private fun saveFilm(film: Film) {
         FilmsRepo.saveFilm(context!!, film) {
-            FilmsRepo.watchlist(context!!) { films ->
-                adapter.setFilms(films.toMutableList())
-            }
+            update()
             Snackbar.make(view!!, R.string.added_to_watchlist, Snackbar.LENGTH_LONG).setAction(getString(R.string.undo), {
-                deleteFilm(film, position)
+                deleteFilm(film)
             }).show()
+        }
+    }
+
+    fun update() {
+        Log.i("WATCHLIST", "UPDATE")
+
+        FilmsRepo.watchlist(context!!) { films ->
+            adapter.setFilms(films.toMutableList())
         }
     }
 }

@@ -22,15 +22,15 @@ object SearchRepo {
             callbackSuccess: ((MutableList<Film>) -> Unit),
             callbackError: ((VolleyError) -> Unit)
     ) {
-        requestSearchFilms(callbackSuccess, callbackError, query, context)
+        requestSearchFilms(callbackSuccess, callbackError, context, query)
     }
 
-    private fun requestSearchFilms(callbackSuccess: (MutableList<Film>) -> Unit, callbackError: (VolleyError) -> Unit, query: String, context: Context) {
+    private fun requestSearchFilms(callbackSuccess: (MutableList<Film>) -> Unit, callbackError: (VolleyError) -> Unit, context: Context, query: String) {
         val url = searchUrl(query)
         Log.d("SEARCH URL", url)
         val request = JsonObjectRequest(Request.Method.GET, url, null, { response ->
             val newFilms = Film.parseFilms(response)
-            FilmsRepo.insertNew(newFilms)
+            FilmsRepo.addNew(newFilms)
             callbackSuccess(newFilms)
         }, { error ->
             callbackError(error)

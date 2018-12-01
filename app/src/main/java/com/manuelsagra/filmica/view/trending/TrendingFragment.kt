@@ -1,5 +1,9 @@
 package com.manuelsagra.filmica.view.trending
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Observer
+import android.arch.paging.LivePagedListBuilder
+import android.arch.paging.PagedList
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,25 +14,27 @@ import android.view.View
 import android.view.ViewGroup
 import com.manuelsagra.filmica.R
 import com.manuelsagra.filmica.data.Film
-import com.manuelsagra.filmica.data.TrendingRepo
+import com.manuelsagra.filmica.data.TrendingDataSourceFactory
 import com.manuelsagra.filmica.view.films.FilmsAdapter
 import com.manuelsagra.filmica.view.utils.FilmClickListener
 import com.manuelsagra.filmica.view.utils.ItemOffsetDecoration
 import kotlinx.android.synthetic.main.fragment_trending.*
-import kotlinx.android.synthetic.main.layout_error.*
+
+const val PAGE_SIZE = 10
 
 class TrendingFragment: Fragment() {
-    lateinit var listener: FilmClickListener
+    lateinit private var listener: FilmClickListener
+    lateinit private var filmList: LiveData<PagedList<Film>>
 
-    val list: RecyclerView by lazy {
-        val instance = view!!.findViewById<RecyclerView>(R.id.list_films_trending)
+    private val list: RecyclerView by lazy {
+        val instance = view!!.findViewById<RecyclerView>(R.id.listFilmsTrending)
         instance.addItemDecoration(ItemOffsetDecoration(R.dimen.grid_offset))
         instance.setHasFixedSize(true)
 
         instance
     }
 
-    val adapter: FilmsAdapter by lazy {
+    private val adapter: FilmsAdapter by lazy {
         val instance = FilmsAdapter() { film ->
             listener.onItemClicked(film)
         }
@@ -42,11 +48,23 @@ class TrendingFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnRetry.setOnClickListener {
-            reload()
-        }
 
         list.adapter = adapter
+
+        val config = PagedList.Config.Builder()
+                .setPageSize(PAGE_SIZE)
+                .setInitialLoadSizeHint(PAGE_SIZE)
+                .setEnablePlaceholders(false)
+                .build()
+        val filmDataSourceFactory = TrendingDataSourceFactory(context!!)
+        filmList = LivePagedListBuilder<Int, Film>(filmDataSourceFactory, config).build()
+
+        filmList.observe(this, Observer { list ->
+            Log.i("Trending", "Changed")
+            progressBar.visibility = View.GONE
+            listFilmsTrending.visibility = View.VISIBLE
+            adapter.submitList(list)
+        })
     }
 
     override fun onAttach(context: Context?) {
@@ -55,29 +73,5 @@ class TrendingFragment: Fragment() {
         if (context is FilmClickListener) {
             listener = context
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        reload()
-    }
-
-    fun reload() {
-        Log.i("RELOAD TRENDING", "Called")
-
-        TrendingRepo.trendingFilms(context!!, { films ->
-            Log.i("RELOAD TRENDING", "Finished")
-            progressBar.visibility = View.INVISIBLE
-            layoutError.visibility = View.INVISIBLE
-            list.visibility = View.VISIBLE
-
-            adapter.setFilms(films)
-        }, { error ->
-            progressBar.visibility = View.INVISIBLE
-            layoutError.visibility = View.VISIBLE
-            list.visibility = View.INVISIBLE
-
-            error.printStackTrace()
-        })
     }
 }

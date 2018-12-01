@@ -4,24 +4,27 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.manuelsagra.filmica.R
 import com.manuelsagra.filmica.data.Film
 import com.manuelsagra.filmica.view.details.DetailsActivity
 import com.manuelsagra.filmica.view.details.DetailsFragment
 import com.manuelsagra.filmica.view.details.DetailsPlaceholderFragment
+import com.manuelsagra.filmica.view.discover.DiscoverFragment
 import com.manuelsagra.filmica.view.search.SearchFragment
 import com.manuelsagra.filmica.view.trending.TrendingFragment
 import com.manuelsagra.filmica.view.utils.FilmClickListener
 import com.manuelsagra.filmica.view.watchlist.WatchlistFragment
 import kotlinx.android.synthetic.main.activity_films.*
+import kotlinx.android.synthetic.main.fragment_watchlist.*
 
-const val TAG_FILMS = "filmsTag"
+const val TAG_DISCOVER = "discoverTag"
 const val TAG_TRENDING = "trendingTag"
 const val TAG_WATCHLIST = "watchlistTag"
 const val TAG_SEARCH = "searchTag"
 
-class FilmsActivity: AppCompatActivity(), FilmClickListener {
-    private lateinit var filmsFragment: FilmsFragment
+class FilmsActivity: AppCompatActivity(), FilmClickListener, DetailsFragment.WatchlistUpdateListener {
+    private lateinit var discoverFragment: DiscoverFragment
     private lateinit var trendingFragment: TrendingFragment
     private lateinit var watchlistFragment: WatchlistFragment
     private lateinit var searchFragment: SearchFragment
@@ -42,7 +45,7 @@ class FilmsActivity: AppCompatActivity(), FilmClickListener {
 
             when (id) {
                 R.id.action_trending -> showMainFragment(trendingFragment)
-                R.id.action_discover -> showMainFragment(filmsFragment)
+                R.id.action_discover -> showMainFragment(discoverFragment)
                 R.id.action_watchlist -> showMainFragment(watchlistFragment)
                 R.id.action_search -> showMainFragment(searchFragment)
             }
@@ -58,17 +61,17 @@ class FilmsActivity: AppCompatActivity(), FilmClickListener {
     }
 
     private fun setupFragments() {
-        filmsFragment = FilmsFragment()
+        discoverFragment = DiscoverFragment()
         trendingFragment = TrendingFragment()
         watchlistFragment = WatchlistFragment()
         searchFragment = SearchFragment()
 
         supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_films, trendingFragment, TAG_TRENDING)
-                .add(R.id.fragment_films, filmsFragment, TAG_FILMS)
+                .add(R.id.fragment_films, discoverFragment, TAG_DISCOVER)
                 .add(R.id.fragment_films, watchlistFragment, TAG_WATCHLIST)
                 .add(R.id.fragment_films, searchFragment, TAG_SEARCH)
-                .hide(filmsFragment)
+                .hide(discoverFragment)
                 .hide(watchlistFragment)
                 .hide(searchFragment)
                 .commit()
@@ -81,7 +84,7 @@ class FilmsActivity: AppCompatActivity(), FilmClickListener {
     }
 
     private fun restoreFragments(savedInstanceState: Bundle) {
-        filmsFragment = supportFragmentManager.findFragmentByTag(TAG_FILMS) as FilmsFragment
+        discoverFragment = supportFragmentManager.findFragmentByTag(TAG_DISCOVER) as DiscoverFragment
         trendingFragment = supportFragmentManager.findFragmentByTag(TAG_TRENDING) as TrendingFragment
         watchlistFragment = supportFragmentManager.findFragmentByTag(TAG_WATCHLIST) as WatchlistFragment
         searchFragment = supportFragmentManager.findFragmentByTag(TAG_SEARCH) as SearchFragment
@@ -101,7 +104,7 @@ class FilmsActivity: AppCompatActivity(), FilmClickListener {
         activeFragment = fragment
     }
 
-    fun showDetails(filmId: String) {
+    private fun showDetails(filmId: String) {
         if (isTablet()) {
             showDetailsFragment(filmId)
         } else {
@@ -122,5 +125,11 @@ class FilmsActivity: AppCompatActivity(), FilmClickListener {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentDetails, fragment)
                 .commit()
+    }
+
+    override fun onWatchlistUpdate() {
+        if (isTablet()) {
+            watchlistFragment.update()
+        }
     }
 }

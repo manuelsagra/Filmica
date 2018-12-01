@@ -5,9 +5,9 @@ import com.manuelsagra.filmica.BuildConfig
 
 object ApiRoutes {
     fun discoverUrl(
+            page: Int = 1,
             language: String = "en-US",
-            sortBy: String = "popularity.desc",
-            page: Int = 1
+            sortBy: String = "popularity.desc"
     ): String {
         return getUriBuilder()
                 .appendPath("discover")
@@ -22,8 +22,8 @@ object ApiRoutes {
     }
 
     fun trendingUrl(
-            timeWindow: String = "day",
-            page: Int = 1
+            page: Int = 1,
+            timeWindow: String = "day"
     ): String {
         return getUriBuilder()
                 .appendPath("trending")
@@ -36,8 +36,8 @@ object ApiRoutes {
 
     fun searchUrl(
             query: String,
-            language: String = "en-US",
-            page: Int = 1
+            page: Int = 1,
+            language: String = "en-US"
     ): String {
         return getUriBuilder()
                 .appendPath("search")

@@ -13,10 +13,8 @@
         android:layout_gravity="center"
         android:indeterminate="true" />
 
-    <include layout="@layout/layout_error"></include>
-
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_films_discover"
+        android:id="@+id/listFilmsDiscover"
         app:layoutManager="android.support.v7.widget.GridLayoutManager"
         app:spanCount="2"
         tools:listitem="@layout/item_film"

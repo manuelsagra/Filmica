@@ -19,7 +19,6 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_details.*
 
 class DetailsFragment: Fragment() {
-
     private var film: Film? = null
 
     companion object {
@@ -79,6 +78,9 @@ class DetailsFragment: Fragment() {
                 }).show()
             }
         }
+        if (activity is WatchlistUpdateListener) {
+            (activity as WatchlistUpdateListener).onWatchlistUpdate()
+        }
     }
 
     private fun saveFilm() {
@@ -88,6 +90,9 @@ class DetailsFragment: Fragment() {
                     deleteFilm()
                 }).show()
             }
+        }
+        if (activity is WatchlistUpdateListener) {
+            (activity as WatchlistUpdateListener).onWatchlistUpdate()
         }
     }
 
@@ -145,5 +150,9 @@ class DetailsFragment: Fragment() {
             overlay.setBackgroundColor(overlayColour)
             btnAdd.backgroundTintList = ColorStateList.valueOf(darkColour)
         }
+    }
+
+    interface WatchlistUpdateListener {
+        fun onWatchlistUpdate()
     }
 }
