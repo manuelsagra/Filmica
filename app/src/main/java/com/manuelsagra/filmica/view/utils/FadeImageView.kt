@@ -1,10 +1,8 @@
 package com.manuelsagra.filmica.view.utils
 
-import android.animation.Animator
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.AttributeSet
-import android.view.animation.Animation
 import android.widget.ImageView
 
 class FadeImageView: ImageView {

@@ -6,17 +6,15 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_watchlist.*
-
 import com.manuelsagra.filmica.R
 import com.manuelsagra.filmica.data.Film
 import com.manuelsagra.filmica.data.FilmsRepo
 import com.manuelsagra.filmica.view.utils.FilmClickListener
 import com.manuelsagra.filmica.view.utils.SwipeToDeleteCallback
+import kotlinx.android.synthetic.main.fragment_watchlist.*
 
 class WatchlistFragment : Fragment() {
     lateinit var listener: FilmClickListener
@@ -93,8 +91,6 @@ class WatchlistFragment : Fragment() {
     }
 
     fun update() {
-        Log.i("WATCHLIST", "UPDATE")
-
         FilmsRepo.watchlist(context!!) { films ->
             adapter.setFilms(films.toMutableList())
         }

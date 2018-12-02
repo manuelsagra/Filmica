@@ -8,16 +8,14 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.manuelsagra.filmica.R
 import com.manuelsagra.filmica.data.DiscoverDataSourceFactory
 import com.manuelsagra.filmica.data.Film
-import com.manuelsagra.filmica.data.TrendingDataSourceFactory
+import com.manuelsagra.filmica.data.PAGE_SIZE
 import com.manuelsagra.filmica.view.films.FilmsAdapter
-import com.manuelsagra.filmica.view.trending.PAGE_SIZE
 import com.manuelsagra.filmica.view.utils.FilmClickListener
 import com.manuelsagra.filmica.view.utils.ItemOffsetDecoration
 import kotlinx.android.synthetic.main.fragment_films.*
@@ -56,14 +54,13 @@ open class DiscoverFragment: Fragment() {
                 .setInitialLoadSizeHint(PAGE_SIZE)
                 .setEnablePlaceholders(false)
                 .build()
-        val filmDataSourceFactory = DiscoverDataSourceFactory(context!!)
+        val filmDataSourceFactory = DiscoverDataSourceFactory(context!!, getString(R.string.lang))
         filmList = LivePagedListBuilder<Int, Film>(filmDataSourceFactory, config).build()
 
         filmList.observe(this, Observer { list ->
-            Log.i("Discover", "Changed")
+            adapter.submitList(list)
             progressBar.visibility = View.GONE
             listFilmsDiscover.visibility = View.VISIBLE
-            adapter.submitList(list)
         })
     }
 

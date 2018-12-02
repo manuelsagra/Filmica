@@ -2,4 +2,21 @@
 <resources>
     <string name="app_name">Filmica</string>
     <string name="button_add">Añadir a la lista</string>
+    <string name="label_genre">Género</string>
+    <string name="label_release">Lanzamiento</string>
+    <string name="label_overview">Sinopsis</string>
+    <string name="error_request">Houston, tenemos un problema...</string>
+    <string name="label_retry">Reintentar</string>
+    <string name="title_discover">Descubrir</string>
+    <string name="title_watchlist">Pendientes</string>
+    <string name="title_share">Compartir película</string>
+    <string name="template_share">Vamos a ver %s (MovieDB la califica con %.1f/10)</string>
+    <string name="title_trending">Tendencias</string>
+    <string name="title_search">Buscar</string>
+    <string name="no_results">No se encontraron resultados</string>
+    <string name="added_to_watchlist">Añadida a pendientes</string>
+    <string name="removed_to_watchlist">Eliminada de pendientes</string>
+    <string name="undo">Deshacer</string>
+    <string name="placeholder_text">Los detalles de la película se mostrarán aquí</string>
+    <string name="lang">es-ES</string>
 </resources>

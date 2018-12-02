@@ -8,21 +8,19 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.manuelsagra.filmica.R
 import com.manuelsagra.filmica.data.Film
+import com.manuelsagra.filmica.data.PAGE_SIZE
 import com.manuelsagra.filmica.data.TrendingDataSourceFactory
 import com.manuelsagra.filmica.view.films.FilmsAdapter
 import com.manuelsagra.filmica.view.utils.FilmClickListener
 import com.manuelsagra.filmica.view.utils.ItemOffsetDecoration
 import kotlinx.android.synthetic.main.fragment_trending.*
 
-const val PAGE_SIZE = 10
-
-class TrendingFragment: Fragment() {
+open class TrendingFragment: Fragment() {
     lateinit private var listener: FilmClickListener
     lateinit private var filmList: LiveData<PagedList<Film>>
 
@@ -56,14 +54,13 @@ class TrendingFragment: Fragment() {
                 .setInitialLoadSizeHint(PAGE_SIZE)
                 .setEnablePlaceholders(false)
                 .build()
-        val filmDataSourceFactory = TrendingDataSourceFactory(context!!)
+        val filmDataSourceFactory = TrendingDataSourceFactory(context!!, getString(R.string.lang))
         filmList = LivePagedListBuilder<Int, Film>(filmDataSourceFactory, config).build()
 
         filmList.observe(this, Observer { list ->
-            Log.i("Trending", "Changed")
+            adapter.submitList(list)
             progressBar.visibility = View.GONE
             listFilmsTrending.visibility = View.VISIBLE
-            adapter.submitList(list)
         })
     }
 

@@ -23,6 +23,7 @@ object ApiRoutes {
 
     fun trendingUrl(
             page: Int = 1,
+            language: String = "en-US",
             timeWindow: String = "day"
     ): String {
         return getUriBuilder()
@@ -30,14 +31,15 @@ object ApiRoutes {
                 .appendPath("movie")
                 .appendPath(timeWindow)
                 .appendQueryParameter("page", page.toString())
+                .appendQueryParameter("language", language)
                 .build()
                 .toString()
     }
 
     fun searchUrl(
             query: String,
-            page: Int = 1,
-            language: String = "en-US"
+            language: String = "en-US",
+            page: Int = 1
     ): String {
         return getUriBuilder()
                 .appendPath("search")

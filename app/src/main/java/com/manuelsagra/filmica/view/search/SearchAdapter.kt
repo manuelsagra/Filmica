@@ -15,11 +15,11 @@ import kotlinx.android.synthetic.main.item_search.view.*
 
 class SearchAdapter(
         clickListener: ((Film) -> Unit)? = null
-): BaseFilmAdapter<SearchAdapter.SearchHolder> (
+): BaseFilmAdapter<SearchAdapter.SearchViewHolder>(
         layoutItem = R.layout.item_search,
-        holderCreator = { view -> SearchHolder(view, clickListener) }
+        holderCreator = { view -> SearchAdapter.SearchViewHolder(view, clickListener) }
 ) {
-    class SearchHolder(view: View, clickListener: ((Film) -> Unit)?): BaseFilmHolder(view, clickListener) {
+    class SearchViewHolder(view: View, clickListener: ((Film) -> Unit)?): BaseFilmHolder(view, clickListener) {
         override fun bindFilm(film: Film) {
             super.bindFilm(film)
 

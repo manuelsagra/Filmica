@@ -3,19 +3,15 @@ package com.manuelsagra.filmica.view.search
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_search.*
-
 import com.manuelsagra.filmica.R
-import com.manuelsagra.filmica.data.Film
-import com.manuelsagra.filmica.data.SearchRepo
+import com.manuelsagra.filmica.data.FilmsRepo
 import com.manuelsagra.filmica.view.utils.FilmClickListener
-import com.manuelsagra.filmica.view.utils.ItemOffsetDecoration
+import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.layout_error.*
 import kotlinx.android.synthetic.main.layout_noresults.*
 
@@ -58,17 +54,14 @@ class SearchFragment : Fragment() {
                     if (query.length > MIN_SEARCH_QUERY) {
                         stopSearch = false
                         progressBar.visibility = View.VISIBLE
-                        layoutError.visibility = View.GONE
-                        layoutNoResults.visibility = View.GONE
-                        listResults.visibility = View.GONE
                         search(query)
                     } else {
                         stopSearch = true
                         progressBar.visibility = View.GONE
-                        layoutError.visibility = View.GONE
-                        layoutNoResults.visibility = View.GONE
-                        listResults.visibility = View.GONE
                     }
+                    layoutError.visibility = View.GONE
+                    layoutNoResults.visibility = View.GONE
+                    listResults.visibility = View.GONE
                 }
             }
 
@@ -82,7 +75,7 @@ class SearchFragment : Fragment() {
     }
 
     fun search(query: String) {
-        SearchRepo.searchFilms(context!!, query, { films ->
+        FilmsRepo.searchFilms(context!!, query, getString(R.string.lang), { films ->
             if (!stopSearch && films.size > 0) {
                 progressBar.visibility = View.GONE
                 layoutError.visibility = View.GONE

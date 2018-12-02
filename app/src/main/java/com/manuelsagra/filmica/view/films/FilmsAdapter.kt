@@ -1,53 +1,24 @@
 package com.manuelsagra.filmica.view.films
 
-import android.arch.paging.PagedListAdapter
 import android.graphics.Bitmap
 import android.support.v4.content.ContextCompat
 import android.support.v7.graphics.Palette
-import android.support.v7.util.DiffUtil
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.manuelsagra.filmica.R
 import com.manuelsagra.filmica.data.Film
 import com.manuelsagra.filmica.view.utils.BaseFilmHolder
+import com.manuelsagra.filmica.view.utils.PagedFilmAdapter
 import com.manuelsagra.filmica.view.utils.SimpleTarget
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_film.view.*
 
 class FilmsAdapter(
         clickListener: ((Film) -> Unit)? = null
-): PagedListAdapter<Film, FilmsAdapter.FilmsViewHolder>(
-        filmDiffCallback
+): PagedFilmAdapter<FilmsAdapter.FilmViewHolder>(
+        layoutItem = R.layout.item_film,
+        holderCreator = { view -> FilmsAdapter.FilmViewHolder(view, clickListener) }
 ) {
-    private val clickListener = clickListener
-
-    companion object {
-        val filmDiffCallback = object : DiffUtil.ItemCallback<Film>() {
-            override fun areItemsTheSame(oldItem: Film?, newItem: Film?): Boolean {
-                return oldItem?.id == newItem?.id
-            }
-
-            override fun areContentsTheSame(oldItem: Film?, newItem: Film?): Boolean {
-                return oldItem == newItem
-            }
-        }
-    }
-
-    override fun onCreateViewHolder(recyclerView: ViewGroup, viewType: Int): FilmsViewHolder {
-        val itemView = LayoutInflater.from(recyclerView.context).inflate(R.layout.item_film, recyclerView, false)
-
-        return FilmsViewHolder(itemView, clickListener)
-    }
-
-    override fun onBindViewHolder(holder: FilmsViewHolder, position: Int) {
-        val film = getItem(position)
-        film?.let {
-            holder.bindFilm(it)
-        }
-    }
-
-    class FilmsViewHolder(itemView: View, clickListener: ((Film) -> Unit)?): BaseFilmHolder(itemView, clickListener) {
+    class FilmViewHolder(itemView: View, clickListener: ((Film) -> Unit)?): BaseFilmHolder(itemView, clickListener) {
         override fun bindFilm(film: Film) {
             super.bindFilm(film)
 
@@ -89,5 +60,4 @@ class FilmsAdapter(
             }
         }
     }
-
 }

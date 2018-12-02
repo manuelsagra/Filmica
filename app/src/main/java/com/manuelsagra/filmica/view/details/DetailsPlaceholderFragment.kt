@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.manuelsagra.filmica.R
 
-
 class DetailsPlaceholderFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.layout_placeholder, container, false)

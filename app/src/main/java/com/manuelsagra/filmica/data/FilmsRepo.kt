@@ -14,6 +14,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
+const val PAGE_SIZE = 10
+
 object FilmsRepo {
     private val films: MutableList<Film> = mutableListOf()
 
@@ -28,19 +30,20 @@ object FilmsRepo {
     }
 
     fun findFilmById(id: String): Film? {
-         return films.find { film ->
-             film.id == id
-         }
+        return films.find { film ->
+            film.id == id
+        }
     }
 
-    fun addNew(newFilms: List<Film>) {
-        newFilms.map {film ->
+    private fun addNew(newFilms: List<Film>) {
+        newFilms.map { film ->
             if (!films.contains(film)) {
                 films.add(film)
             }
         }
     }
 
+    // Room
     fun saveFilm(context: Context, film: Film, callbackSuccess: (Film) -> Unit) {
         GlobalScope.launch(Dispatchers.Main) {
             var async = async(Dispatchers.IO) {
@@ -61,6 +64,7 @@ object FilmsRepo {
         }
     }
 
+    // Watchlist
     fun watchlist(context: Context, callbackSuccess: (List<Film>) -> Unit) {
         GlobalScope.launch(Dispatchers.Main) {
             var async = async(Dispatchers.IO) {
@@ -76,15 +80,12 @@ object FilmsRepo {
     fun discoverFilms(
             context: Context,
             page: Int,
+            language: String,
             callbackSuccess: ((MutableList<Film>, Int) -> Unit),
             callbackError: ((VolleyError) -> Unit)
     ) {
-        requestDiscoverFilms(callbackSuccess, callbackError, context, page)
-    }
-
-    private fun requestDiscoverFilms(callbackSuccess: (MutableList<Film>, Int) -> Unit, callbackError: (VolleyError) -> Unit, context: Context, page: Int) {
-        val url = discoverUrl(page)
-        Log.i("DiscoverRepo", url.toString())
+        val url = discoverUrl(page, language)
+        Log.i("Discover URL", url.toString())
         val request = JsonObjectRequest(Request.Method.GET, url, null, { response ->
             val newFilms = Film.parseFilms(response)
             addNew(newFilms)
@@ -101,19 +102,41 @@ object FilmsRepo {
     fun trendingFilms(
             context: Context,
             page: Int,
+            language: String,
             callbackSuccess: ((MutableList<Film>, Int) -> Unit),
             callbackError: ((VolleyError) -> Unit)
     ) {
-        requestTrendingFilms(callbackSuccess, callbackError, context, page)
-    }
-
-    private fun requestTrendingFilms(callbackSuccess: (MutableList<Film>, Int) -> Unit, callbackError: (VolleyError) -> Unit, context: Context, page: Int) {
-        val url = trendingUrl(page)
-        Log.i("TrendingRepo", url.toString())
+        val url = trendingUrl(page, language)
+        Log.i("Trending URL", url.toString())
         val request = JsonObjectRequest(Request.Method.GET, url, null, { response ->
             val newFilms = Film.parseFilms(response)
             addNew(newFilms)
             callbackSuccess(newFilms, response.getInt("total_pages"))
+        }, { error ->
+            callbackError(error)
+        })
+
+        Volley.newRequestQueue(context)
+                .add(request)
+    }
+
+    // Search
+    fun searchFilms(
+            context: Context,
+            query: String,
+            language: String,
+            callbackSuccess: ((MutableList<Film>) -> Unit),
+            callbackError: ((VolleyError) -> Unit)
+    ) {
+        val url = ApiRoutes.searchUrl(query, language)
+        Log.i("Search URL", url)
+        val request = JsonObjectRequest(Request.Method.GET, url, null, { response ->
+            var newFilms = Film.parseFilms(response)
+            if (newFilms.size > PAGE_SIZE) {
+                newFilms = newFilms.subList(0, PAGE_SIZE)
+            }
+            addNew(newFilms)
+            callbackSuccess(newFilms)
         }, { error ->
             callbackError(error)
         })

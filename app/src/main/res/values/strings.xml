@@ -8,8 +8,7 @@
     <string name="label_retry">Retry</string>
     <string name="title_discover">Discover</string>
     <string name="title_watchlist">Watchlist</string>
-    <string name="title_share">Share Film</string>
-
+    <string name="title_share">Share film</string>
     <string name="template_share">Let\'s watch %s (MovieDB rates it with %.1f/10)</string>
     <string name="title_trending">Trending</string>
     <string name="title_search">Search</string>
@@ -17,5 +16,6 @@
     <string name="added_to_watchlist">Added to watchlist</string>
     <string name="removed_to_watchlist">Removed from watchlist</string>
     <string name="undo">Undo</string>
-    <string name="placeholder_text">Movie details will be shown here</string>
+    <string name="placeholder_text">Film details will be shown here</string>
+    <string name="lang">en-US</string>
 </resources>
